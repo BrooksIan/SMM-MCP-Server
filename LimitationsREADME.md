@@ -6,6 +6,70 @@ This document details the current limitations and non-working features of the SM
 
 **Overall Success Rate**: 25.6% (22 out of 86 MCP tools working)
 
+## Comprehensive Capabilities
+
+The SSM MCP Server provides **86 MCP tools** with **22 verified working tools** (25.6% success rate), covering core SMM functionality including cluster management, topic operations, and Kafka Connect integration through Claude Desktop.
+
+### 📊 Coverage Statistics
+- **Total MCP Tools**: 86
+- **Working Tools**: 22 (25.6% success rate)
+- **Functional Categories**: 16 (5 fully working)
+- **Available Endpoints**: 60+
+
+### 🎯 Key Capabilities
+
+#### **✅ Working SMM Management**
+- **✅ Cluster Management**: Monitor brokers, cluster health, and configuration (100% working)
+- **✅ Topic Management (Read)**: List topics, get topic info, configurations (62.5% working)
+- **✅ Notifiers Management**: Alert notification configuration (66.7% working)
+- **✅ Kafka Connect (Enhanced)**: Connector templates, configs, monitoring (62.5% working)
+- **✅ Replication Statistics**: Basic replication status checking (20% working)
+
+#### **⚠️ Limited/Non-Working Features**
+- **⚠️ Topic Management (Write)**: Limited - SMM is primarily a monitoring tool
+- **⚠️ Consumer Management**: Currently not working (0% working)
+- **⚠️ Metrics & Monitoring**: Currently not working (0% working)
+- **⚠️ Alert Management**: Currently not working (0% working)
+- **⚠️ Schema Management**: Currently not working (0% working)
+- **⚠️ Lineage Tracking**: Currently not working (0% working)
+
+#### **✅ Enterprise Ready**
+- **✅ Security**: Multiple authentication methods and secure token handling
+- **✅ Multi-Environment Support**: Works with both standalone and CDP deployments
+- **✅ Flexibility**: Configurable read-only and write modes
+- **⚠️ Monitoring**: Limited metrics and alerting capabilities
+- **⚠️ Integration**: Partial integration with Cloudera Data Platform
+
+### 🚀 Use Cases
+
+#### **Data Engineers**
+- ✅ Topic listing and configuration viewing
+- ✅ Cluster and broker information
+- ✅ Kafka Connect connector templates and configs
+- ⚠️ Consumer group monitoring (currently not working)
+- ⚠️ Real-time metrics (currently not working)
+
+#### **DevOps Engineers**
+- ✅ Cluster health monitoring
+- ✅ Broker configuration and management
+- ✅ Kafka Connect connector management
+- ⚠️ System performance monitoring (currently not working)
+- ⚠️ Alert management (currently not working)
+
+#### **Data Scientists**
+- ✅ Topic information and configuration analysis
+- ✅ Cluster structure understanding
+- ⚠️ Topic content exploration (currently not working)
+- ⚠️ Data lineage tracking (currently not working)
+- ⚠️ Consumer group behavior analysis (currently not working)
+
+#### **Platform Administrators**
+- ✅ Cluster configuration viewing
+- ✅ Broker management
+- ✅ Kafka Connect configuration
+- ⚠️ User access and permissions (currently not working)
+- ⚠️ Alert policy management (currently not working)
+
 ## SMM Topic Creation Limitations
 
 **Important**: SMM (Streams Messaging Manager) is primarily a **monitoring and management tool**, not a topic creation tool. While the MCP server can send topic creation requests to SMM (which returns HTTP 204 "No Content"), SMM does not actually create topics.

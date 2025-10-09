@@ -470,11 +470,15 @@ Once configured, you can ask Claude questions like:
 
 ## Available Tools
 
-### 🔧 Core Information
+**Current Status**: 25.6% success rate (22 out of 86 MCP tools working)
+
+The following tools are currently **working and functional**:
+
+### 🔧 Core Information (100% working)
 - `get_smm_info()` - Get SMM version and system information
 - `get_smm_version()` - Get SMM version details
 
-### 🏢 Cluster and Broker Management
+### 🏢 Cluster and Broker Management (100% working)
 - `get_cluster_details()` - Get cluster details and information
 - `get_brokers()` - Get all brokers in the cluster
 - `get_broker(broker_id)` - Get details of a specific broker
@@ -482,7 +486,7 @@ Once configured, you can ask Claude questions like:
 - `get_all_broker_details()` - Get all broker details with configurations
 - `get_broker_details(broker_id)` - Get detailed broker information including configuration
 
-### 📊 Topic Management
+### 📊 Topic Management - Read Operations (62.5% working)
 - `get_all_topic_infos()` - Get all topic information
 - `get_topic_description(topic_name)` - Get detailed description of a specific topic
 - `get_topic_info(topic_name)` - Get basic information about a specific topic
@@ -491,117 +495,24 @@ Once configured, you can ask Claude questions like:
 - `get_topic_configs(topic_name)` - Get configuration for a specific topic
 - `get_all_topic_configs()` - Get configurations for all topics
 - `get_default_topic_configs()` - Get default topic configurations
-- `get_topic_offsets(topic_name)` - Get offset information for a topic
-- `get_topic_content(topic_name, partition, offset, limit?)` - Get content from a topic partition
 
-### 📝 Topic Management (Write Operations)
-- `create_topics(topics_config)` - **Note**: SMM API accepts requests but doesn't actually create topics
-- `create_partitions(topic_name, partition_count)` - **Note**: SMM API accepts requests but doesn't actually create partitions
-- `delete_topics(topic_names)` - **Note**: SMM API accepts requests but doesn't actually delete topics
-- `alter_topic_configs(topic_name, configs)` - **Note**: SMM API accepts requests but doesn't actually modify topic configurations
-
-**⚠️ Important**: SMM is primarily a monitoring tool. For actual topic creation, use Kafka admin tools or the Kafka Admin API.
-
-### 👥 Consumer Group Management
-- `get_consumer_groups()` - Get all consumer groups
-- `get_consumer_group_names()` - Get all consumer group names
-- `get_consumer_group_info(group_name)` - Get detailed information about a specific consumer group
-- `get_all_consumer_info()` - Get information about all consumers
-- `get_consumer_info(consumer_id)` - Get information about a specific consumer
-- `reset_offset(group_name, topic_name, partition, offset)` - Reset consumer group offset
-
-### 📈 Metrics and Monitoring
-- `get_cluster_with_broker_metrics(duration?, from_time?, to_time?)` - Get cluster metrics including broker metrics
-- `get_cluster_with_topic_metrics(duration?, from_time?, to_time?)` - Get cluster metrics including topic metrics
-- `get_all_consumer_group_metrics(duration?, from_time?, to_time?, state?, include_producer_metrics?, include_assignments?)` - Get metrics for all consumer groups
-- `get_consumer_group_metrics(group_name, duration?, from_time?, to_time?)` - Get metrics for a specific consumer group
-- `get_all_producer_metrics(duration?, from_time?, to_time?)` - Get metrics for all producers
-- `get_producer_metrics(producer_id, duration?, from_time?, to_time?)` - Get metrics for a specific producer
-- `get_topic_metrics(topic_name, duration?, from_time?, to_time?)` - Get metrics for a specific topic
-- `get_topic_partition_metrics(topic_name, partition_num, duration?, from_time?, to_time?)` - Get metrics for a specific topic partition
-
-### 🚨 Alert Management
-- `get_all_alert_policies()` - Get all alert policies
-- `get_alert_policy(policy_id)` - Get details of a specific alert policy
-- `get_alert_notifications()` - Get all alert notifications
-- `get_alert_notifications_by_entity_type(entity_type)` - Get alert notifications by entity type
-- `get_alert_notifications_by_entity_type_and_name(entity_type, entity_name)` - Get alert notifications by entity type and name
-
-### 🚨 Alert Management (Write Operations)
-- `add_alert_policy(policy_config)` - Add a new alert policy
-- `update_alert_policy(policy_id, policy_config)` - Update an existing alert policy
-- `delete_alert_policy(policy_id)` - Delete an alert policy
-- `enable_alert_policy(policy_id)` - Enable an alert policy
-- `disable_alert_policy(policy_id)` - Disable an alert policy
-- `mark_alert_notifications(notification_ids)` - Mark alert notifications as read
-- `unmark_alert_notifications(notification_ids)` - Unmark alert notifications as unread
-
-### 📋 Schema Registry
-- `get_schema_registry_info()` - Get schema registry information
-- `get_schema_meta_for_topic(topic_name)` - Get schema metadata for a specific topic
-- `get_key_schema_version_infos(topic_name)` - Get key schema version information for a topic
-- `get_value_schema_version_infos(topic_name)` - Get value schema version information for a topic
-
-### 📋 Schema Registry (Write Operations)
-- `register_topic_schema_meta(topic_name, schema_config)` - Register schema metadata for a topic
-
-### 🔌 Kafka Connect
-- `get_connectors()` - Get all Kafka Connect connectors
-- `get_connector(connector_name)` - Get details of a specific connector
-- `get_connector_config_def(connector_name)` - Get connector configuration definition
-- `get_connector_permissions(connector_name)` - Get connector permissions
-- `get_connect_worker_metrics(duration?, from_time?, to_time?)` - Get Kafka Connect worker metrics
-
-### 🔌 Kafka Connect (Write Operations)
-- `create_connector(connector_config)` - Create a new connector
-- `delete_connector(connector_name)` - Delete a connector
-- `configure_connector(connector_name, config)` - Configure a connector
-
-### 🔗 Lineage Tracking
-- `get_topic_lineage(topic_name)` - Get lineage information for a topic
-- `get_topic_partition_lineage(topic_name, partition)` - Get lineage information for a topic partition
-- `get_consumer_group_lineage(group_name)` - Get lineage information for a consumer group
-- `get_producer_lineage(producer_id)` - Get lineage information for a producer
-
-### 🔐 Authentication
-- `get_access()` - Get access information
-
-### 🔐 Authentication (Write Operations)
-- `login(username, password)` - Login to SMM
-- `logout()` - Logout from SMM
-
-### 🚨 Alert Management (Enhanced)
-- `disable_alert_policy(policy_id)` - Disable an alert policy
-- `enable_alert_policy(policy_id)` - Enable an alert policy
-- `get_alert_policy_automata(policy_id)` - Get alert policy automata details
-- `get_alert_notifications_by_entity(entity_type, entity_id)` - Get alert notifications by entity type and ID
-- `mark_alert_notifications_read(notification_ids)` - Mark alert notifications as read
-
-### 📢 Notifiers Management
+### 📢 Notifiers Management (66.7% working)
 - `get_notifiers()` - Get all notifiers
-- `get_notifier(notifier_id)` - Get specific notifier details
 - `get_notifier_provider_configs()` - Get notifier provider configurations
 
-### ⏱️ End-to-End Latency Monitoring
-- `get_topic_etelatency(topic_name, duration?, from_time?, to_time?)` - Get end-to-end latency for a topic
-- `get_topic_group_etelatency(topic_name, group_name, duration?, from_time?, to_time?)` - Get end-to-end latency for topic and consumer group
-
-### 🔄 Replication Statistics
-- `get_replication_stats()` - Get replication statistics
+### 🔄 Replication Statistics (20% working)
 - `is_replication_configured()` - Check if replication is configured
-- `get_replication_stats_by_cluster(source, target)` - Get replication stats by source and target clusters
-- `get_topic_replication_stats(source, target, topic_name)` - Get replication stats for specific topic
-- `get_topic_replication_stats_simple(topic_name)` - Get simple replication stats for topic
 
-### 🔌 Kafka Connect (Enhanced)
+### 🔌 Kafka Connect Enhanced (62.5% working)
 - `get_connector_templates()` - Get available connector templates
 - `get_connector_config_definitions(connector_plugin_class)` - Get connector configuration definitions
 - `get_connector_config_sample(name, connector_plugin_class, version)` - Get sample connector configuration
-- `validate_connector_config(config)` - Validate connector configuration
-- `perform_connector_action(connector_name, action)` - Perform connector actions (start, stop, restart, etc.)
 - `is_connect_configured()` - Check if Kafka Connect is configured
-- `get_connector_sink_metrics(connector_name)` - Get connector sink metrics
 - `get_connect_worker_metrics(duration?, from_time?, to_time?)` - Get Kafka Connect worker metrics
+
+---
+
+**📋 For complete information about non-working tools and limitations, see [LimitationsREADME.md](LimitationsREADME.md)**
 
 ## Write Operations
 
@@ -625,69 +536,6 @@ By default, the server runs in read-only mode for CDP deployments and write-enab
 
 **For topic management, use Kafka admin tools or the Kafka Admin API directly.**
 
-## Comprehensive Capabilities
-
-The SSM MCP Server provides **86 MCP tools** with **22 verified working tools** (25.6% success rate), covering core SMM functionality including cluster management, topic operations, and Kafka Connect integration through Claude Desktop.
-
-### 📊 Coverage Statistics
-- **Total MCP Tools**: 86
-- **Working Tools**: 22 (25.6% success rate)
-- **Functional Categories**: 16 (5 fully working)
-- **Available Endpoints**: 60+
-
-### 🎯 Key Capabilities
-
-#### **✅ Working SMM Management**
-- **✅ Cluster Management**: Monitor brokers, cluster health, and configuration (100% working)
-- **✅ Topic Management (Read)**: List topics, get topic info, configurations (62.5% working)
-- **✅ Notifiers Management**: Alert notification configuration (66.7% working)
-- **✅ Kafka Connect (Enhanced)**: Connector templates, configs, monitoring (62.5% working)
-- **✅ Replication Statistics**: Basic replication status checking (20% working)
-
-#### **⚠️ Limited/Non-Working Features**
-- **⚠️ Topic Management (Write)**: Limited - SMM is primarily a monitoring tool
-- **⚠️ Consumer Management**: Currently not working (0% working)
-- **⚠️ Metrics & Monitoring**: Currently not working (0% working)
-- **⚠️ Alert Management**: Currently not working (0% working)
-- **⚠️ Schema Management**: Currently not working (0% working)
-- **⚠️ Lineage Tracking**: Currently not working (0% working)
-
-#### **✅ Enterprise Ready**
-- **✅ Security**: Multiple authentication methods and secure token handling
-- **✅ Multi-Environment Support**: Works with both standalone and CDP deployments
-- **✅ Flexibility**: Configurable read-only and write modes
-- **⚠️ Monitoring**: Limited metrics and alerting capabilities
-- **⚠️ Integration**: Partial integration with Cloudera Data Platform
-
-### 🚀 Use Cases
-
-#### **Data Engineers**
-- ✅ Topic listing and configuration viewing
-- ✅ Cluster and broker information
-- ✅ Kafka Connect connector templates and configs
-- ⚠️ Consumer group monitoring (currently not working)
-- ⚠️ Real-time metrics (currently not working)
-
-#### **DevOps Engineers**
-- ✅ Cluster health monitoring
-- ✅ Broker configuration and management
-- ✅ Kafka Connect connector management
-- ⚠️ System performance monitoring (currently not working)
-- ⚠️ Alert management (currently not working)
-
-#### **Data Scientists**
-- ✅ Topic information and configuration analysis
-- ✅ Cluster structure understanding
-- ⚠️ Topic content exploration (currently not working)
-- ⚠️ Data lineage tracking (currently not working)
-- ⚠️ Consumer group behavior analysis (currently not working)
-
-#### **Platform Administrators**
-- ✅ Cluster configuration viewing
-- ✅ Broker management
-- ✅ Kafka Connect configuration
-- ⚠️ User access and permissions (currently not working)
-- ⚠️ Alert policy management (currently not working)
 
 ## Limitations
 
