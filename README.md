@@ -398,6 +398,76 @@ uv add --dev package-name
 uv sync --upgrade
 ```
 
+## Example Usage
+
+Once configured, you can ask Claude questions like:
+
+### Basic Information
+- "What version of SMM am I running?"
+- "Show me the cluster details"
+- "List all brokers in the cluster"
+- "What topics are available?"
+- "Show me all consumer groups"
+
+![Cluster Health](images/ClusterHealth.png)
+*Example: Cluster health and broker information display*
+
+### Topic Management
+- "Show me the configuration for topic 'sales-data'"
+- "Show me the content of topic 'logs' partition 0"
+- "List all topics in the cluster"
+- "What are the metrics for topic 'user-events'?"
+
+![List All User Topics](images/ListallUserTopics.png)
+*Example: Listing all user topics in the cluster*
+
+![Topic Information](images/ListTopicInfo.png)
+*Example: Detailed topic information and configuration*
+
+![Configuration Management](images/ConfigurationMangement.png)
+*Example: Topic configuration management and analysis*
+
+**Note**: SMM is primarily a monitoring tool. For topic creation/deletion, use Kafka admin tools:
+- `kafka-topics.sh --create --topic user-events --partitions 3 --bootstrap-server localhost:9092`
+- `kafka-topics.sh --delete --topic test-topic --bootstrap-server localhost:9092`
+
+### Consumer Group Management
+- "List all consumer groups"
+- "Show me details for consumer group 'my-app'"
+- "Reset the offset for consumer group 'my-app' on topic 'user-events' partition 0 to offset 100"
+- "What consumers are currently active?"
+
+![Broker Information](images/ListBrokerInfo.png)
+*Example: Detailed broker information and monitoring*
+
+### Metrics and Monitoring
+- "Show me cluster metrics for the last hour"
+- "What are the metrics for topic 'user-events'?"
+- "Show me consumer group metrics for 'my-app'"
+- "What are the broker metrics for broker 1?"
+
+### Alert Management
+- "Show me all alert policies"
+- "Create an alert policy for topic lag"
+- "What alerts are currently active?"
+- "Mark these notifications as read"
+
+### Schema Registry
+- "Show me schema information for topic 'user-events'"
+- "What are the key and value schemas for topic 'sales-data'?"
+- "Register a new schema for topic 'events'"
+
+### Kafka Connect
+- "List all Kafka Connect connectors"
+- "Show me details for connector 'file-source'"
+- "Create a new connector for database sync"
+- "What are the Connect worker metrics?"
+
+### Lineage and Data Flow
+- "Show me the lineage for topic 'user-events'"
+- "What's the data flow for consumer group 'analytics'?"
+- "Show me producer lineage for 'data-ingestion'"
+
 ## Available Tools
 
 ### 🔧 Core Information
@@ -532,76 +602,6 @@ uv sync --upgrade
 - `is_connect_configured()` - Check if Kafka Connect is configured
 - `get_connector_sink_metrics(connector_name)` - Get connector sink metrics
 - `get_connect_worker_metrics(duration?, from_time?, to_time?)` - Get Kafka Connect worker metrics
-
-## Example Usage
-
-Once configured, you can ask Claude questions like:
-
-### Basic Information
-- "What version of SMM am I running?"
-- "Show me the cluster details"
-- "List all brokers in the cluster"
-- "What topics are available?"
-- "Show me all consumer groups"
-
-![Cluster Health](images/ClusterHealth.png)
-*Example: Cluster health and broker information display*
-
-### Topic Management
-- "Show me the configuration for topic 'sales-data'"
-- "Show me the content of topic 'logs' partition 0"
-- "List all topics in the cluster"
-- "What are the metrics for topic 'user-events'?"
-
-![List All User Topics](images/ListallUserTopics.png)
-*Example: Listing all user topics in the cluster*
-
-![Topic Information](images/ListTopicInfo.png)
-*Example: Detailed topic information and configuration*
-
-![Configuration Management](images/ConfigurationMangement.png)
-*Example: Topic configuration management and analysis*
-
-**Note**: SMM is primarily a monitoring tool. For topic creation/deletion, use Kafka admin tools:
-- `kafka-topics.sh --create --topic user-events --partitions 3 --bootstrap-server localhost:9092`
-- `kafka-topics.sh --delete --topic test-topic --bootstrap-server localhost:9092`
-
-### Consumer Group Management
-- "List all consumer groups"
-- "Show me details for consumer group 'my-app'"
-- "Reset the offset for consumer group 'my-app' on topic 'user-events' partition 0 to offset 100"
-- "What consumers are currently active?"
-
-![Broker Information](images/ListBrokerInfo.png)
-*Example: Detailed broker information and monitoring*
-
-### Metrics and Monitoring
-- "Show me cluster metrics for the last hour"
-- "What are the metrics for topic 'user-events'?"
-- "Show me consumer group metrics for 'my-app'"
-- "What are the broker metrics for broker 1?"
-
-### Alert Management
-- "Show me all alert policies"
-- "Create an alert policy for topic lag"
-- "What alerts are currently active?"
-- "Mark these notifications as read"
-
-### Schema Registry
-- "Show me schema information for topic 'user-events'"
-- "What are the key and value schemas for topic 'sales-data'?"
-- "Register a new schema for topic 'events'"
-
-### Kafka Connect
-- "List all Kafka Connect connectors"
-- "Show me details for connector 'file-source'"
-- "Create a new connector for database sync"
-- "What are the Connect worker metrics?"
-
-### Lineage and Data Flow
-- "Show me the lineage for topic 'user-events'"
-- "What's the data flow for consumer group 'analytics'?"
-- "Show me producer lineage for 'data-ingestion'"
 
 ## Write Operations
 
