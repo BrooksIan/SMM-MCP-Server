@@ -40,6 +40,8 @@ make test-smm
 
 ### Core Tests
 - `test_smm_connection.py` - Tests basic SMM connectivity and endpoints
+- `test_connection.py` - Direct SMM connection testing script
+- `test_connection_uv.py` - UV-based connection testing script
 - `test_mcp_server.py` - Tests MCP server components and structure
 - `run_tests.py` - Test runner that executes all tests
 
