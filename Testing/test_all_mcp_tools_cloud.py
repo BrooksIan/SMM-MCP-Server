@@ -125,6 +125,13 @@ def test_all_mcp_tools_cloud():
             ("get_consumer_group_configs", "Get consumer group configs", ["test-group"]),
             ("get_connector_configs", "Get connector configs", ["test-connector"]),
             
+            # Additional working endpoints discovered through API exploration
+            ("get_admin_cluster", "Get admin cluster information", []),
+            ("get_admin_brokers", "Get admin brokers information", []),
+            ("get_admin_topics", "Get admin topics information", []),
+            ("get_admin_topic_details", "Get admin topic details", ["heartbeats"]),
+            ("get_admin_topic_partitions", "Get admin topic partitions", ["heartbeats"]),
+            
             # Kafka Connect
             ("get_connectors", "Get connectors", []),
             ("get_connector", "Get connector", ["test-connector"]),

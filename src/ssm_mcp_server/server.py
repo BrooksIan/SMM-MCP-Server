@@ -761,6 +761,32 @@ def create_server(smm: SMMClient, readonly: bool) -> FastMCP:
         """Get Kafka Connect worker metrics."""
         return _handle_smm_operation(smm.get_connect_worker_metrics, duration, from_time, to_time)
 
+    # Additional working endpoints discovered through API exploration
+    @app.tool()
+    async def get_admin_cluster() -> Dict[str, Any]:
+        """Get admin cluster information with detailed broker and controller data."""
+        return _handle_smm_operation(smm.get_admin_cluster)
+    
+    @app.tool()
+    async def get_admin_brokers() -> Dict[str, Any]:
+        """Get admin brokers information with detailed broker data."""
+        return _handle_smm_operation(smm.get_admin_brokers)
+    
+    @app.tool()
+    async def get_admin_topics() -> Dict[str, Any]:
+        """Get admin topics information with detailed topic and partition data."""
+        return _handle_smm_operation(smm.get_admin_topics)
+    
+    @app.tool()
+    async def get_admin_topic_details(topic_name: str) -> Dict[str, Any]:
+        """Get admin topic details for a specific topic."""
+        return _handle_smm_operation(smm.get_admin_topic_details, topic_name)
+    
+    @app.tool()
+    async def get_admin_topic_partitions(topic_name: str) -> Dict[str, Any]:
+        """Get admin topic partitions for a specific topic."""
+        return _handle_smm_operation(smm.get_admin_topic_partitions, topic_name)
+
     return app
 
 

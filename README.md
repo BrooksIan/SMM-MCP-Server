@@ -9,14 +9,15 @@ Model Context Protocol server providing access to Cloudera Streams Messaging Man
 
 ## ⚠️ Current Status
 
-**25.6% Success Rate** - 22 out of 86 MCP tools are currently working. Core functionality including cluster management, topic listing, and Kafka Connect integration is operational. Many advanced features (metrics, alerts, consumer groups) are not yet working due to API endpoint issues.
+**34.4% Success Rate** - 22 out of 64 MCP tools are currently working. Core functionality including cluster management, topic listing, and admin operations is operational. Many advanced features (metrics, alerts, consumer groups) are not yet working due to API endpoint limitations.
 
 **Working Features:**
+- ✅ Core SMM Management (100%)
 - ✅ Cluster Management (100%)
-- ✅ Topic Management - Read Operations (62.5%)
-- ✅ Notifiers Management (66.7%)
-- ✅ Kafka Connect - Enhanced Features (62.5%)
-- ✅ Replication Statistics (20%)
+- ✅ Broker Management (100%)
+- ✅ Topic Management (100%)
+- ✅ Configuration Management (100%)
+- ✅ Admin Endpoints (100%) - **NEW!**
 
 ## Features
 
@@ -24,19 +25,19 @@ Model Context Protocol server providing access to Cloudera Streams Messaging Man
   - **Direct SMM Authentication**: Basic auth for standalone SMM deployments
   - **Apache Knox Integration**: JWT tokens, cookies, and passcode tokens for CDP deployments
 - **Read-only by default** - Safe exploration of SMM clusters and configuration
-- **Working SMM API coverage** with **22+ verified MCP tools** for core SMM management:
-  - **✅ Cluster Management**: Broker details, cluster health, configuration (100% working)
-  - **✅ Topic Management (Read)**: List topics, get topic info, configurations (62.5% working)
-  - **✅ Notifiers Management**: Alert notification configuration (66.7% working)
-  - **✅ Kafka Connect (Enhanced)**: Connector templates, configs, monitoring (62.5% working)
-  - **✅ Replication Statistics**: Basic replication status checking (20% working)
-  - **⚠️ Topic Management (Write)**: Limited - SMM is primarily a monitoring tool
-  - **⚠️ Consumer Group Management**: Currently not working (0% working)
-  - **⚠️ Metrics & Monitoring**: Currently not working (0% working)
-  - **⚠️ Alert Management**: Currently not working (0% working)
-  - **⚠️ Schema Registry**: Currently not working (0% working)
-  - **⚠️ Lineage Tracking**: Currently not working (0% working)
-  - **⚠️ Authentication**: Currently not working (0% working)
+- **Working SMM API coverage** with **22 verified MCP tools** for core SMM management:
+  - **✅ Core SMM Management**: Version info, system details (100% working)
+  - **✅ Cluster Management**: Cluster details, broker information (100% working)
+  - **✅ Broker Management**: Broker details, metrics, configurations (100% working)
+  - **✅ Topic Management**: List topics, get topic info, configurations (100% working)
+  - **✅ Configuration Management**: Broker configs, topic configs (100% working)
+  - **✅ Admin Endpoints**: Detailed cluster, broker, and topic data (100% working)
+  - **⚠️ Consumer Group Management**: Not available through SMM API (0% working)
+  - **⚠️ Metrics & Monitoring**: Not available through SMM API (0% working)
+  - **⚠️ Alert Management**: Not available through SMM API (0% working)
+  - **⚠️ Topic Data Sampling**: Not available through SMM API (0% working)
+  - **⚠️ Kafka Connect**: Not available through SMM API (0% working)
+  - **⚠️ Health Monitoring**: Not available through SMM API (0% working)
 
 ## Quick Start
 
@@ -81,128 +82,6 @@ Model Context Protocol server providing access to Cloudera Streams Messaging Man
 
 3. **Restart Claude Desktop** and start interacting with your SMM cluster!
 
-## Docker Setup
-
-### Quick Start with Docker Compose
-
-The project includes a complete Docker Compose setup for running SMM with all dependencies:
-
-1. **Start the full Cloudera stack:**
-   ```bash
-   docker-compose up -d
-   ```
-
-2. **Wait for services to be healthy:**
-   ```bash
-   # Check service status
-   docker-compose ps
-   
-   # View logs for SMM service
-   docker-compose logs -f smm
-   ```
-
-3. **Access SMM:**
-   - **SMM Web UI**: http://localhost:8585
-   - **SMM API**: http://localhost:9991/api/v1/admin
-
-4. **Configure the MCP Server** for Docker setup:
-   ```json
-   {
-     "mcpServers": {
-       "ssm-mcp-server": {
-         "command": "/FULL/PATH/TO/SSM-MCP-Server/run_mcp_server.sh",
-         "args": [],
-         "cwd": "/FULL/PATH/TO/SSM-MCP-Server",
-         "env": {
-           "MCP_TRANSPORT": "stdio",
-           "SMM_API_BASE": "http://localhost:9991/api/v1/admin",
-           "SMM_USER": "admin",
-           "SMM_PASSWORD": "admin",
-           "SMM_READONLY": "true"
-         }
-       }
-     }
-   }
-   ```
-
-### Docker Services Included
-
-The Docker Compose setup includes:
-
-- **SMM** (Streams Messaging Manager) - Port 8585 (UI), 9991 (API)
-- **Kafka** - Port 9092, 9094, 24042, 9100
-- **Zookeeper** - Port 2181
-- **Kafka Connect** - Port 28083, 28086
-- **Schema Registry** - Port 7788
-- **Prometheus** - Port 9090
-- **PostgreSQL** - Port 5432
-- **Apache Knox** - Port 8444 (HTTPS), 8082 (HTTP)
-- **Flink** - Port 8081 (JobManager)
-- **NiFi** - Port 8080, 8443
-
-### Docker Management Commands
-
-```bash
-# Start all services
-docker-compose up -d
-
-# Stop all services
-docker-compose down
-
-# View logs
-docker-compose logs -f smm
-
-# Restart a specific service
-docker-compose restart smm
-
-# Scale services (e.g., Flink task managers)
-docker-compose up -d --scale flink-taskmanager=3
-
-# Clean up (removes containers and volumes)
-docker-compose down -v
-```
-
-### Sample Data Loading with NiFi
-
-The project includes a pre-configured NiFi flowfile (`StockPriceToKafka.json`) that demonstrates data ingestion into Kafka:
-
-**What it does:**
-- Fetches real-time NVIDIA (NVDA) stock price data from Alpha Vantage API
-- Processes and transforms the JSON data using NiFi processors
-- Publishes the data to a Kafka topic named "NVDA"
-
-**How to use it:**
-
-1. **Start the Docker stack:**
-   ```bash
-   docker-compose up -d
-   ```
-
-2. **Access NiFi:**
-   - Open http://localhost:8080 in your browser
-   - Login with admin/admin (if single-user mode is enabled)
-
-3. **Import the flowfile:**
-   - Go to the NiFi canvas
-   - Click the "Upload Template" button (📄 icon)
-   - Select `StockPriceToKafka.json` from the project root
-   - Drag the template onto the canvas to create the flow
-
-4. **Configure and start:**
-   - The flow will automatically start fetching stock data
-   - Data will be published to the "NVDA" Kafka topic
-   - You can monitor the flow in NiFi and view the data in SMM
-
-**Flow Components:**
-- **InvokeHTTP**: Fetches data from Alpha Vantage API
-- **SplitJson**: Splits the response into individual records
-- **FlattenJson**: Flattens nested JSON structure
-- **ConvertRecord**: Converts data format
-- **PublishKafka**: Publishes to Kafka topic "NVDA"
-- **LogAttribute**: Logs successful publications
-
-**Note:** You'll need to obtain a free API key from [Alpha Vantage](https://www.alphavantage.co/support/#api-key) and update the URL in the InvokeHTTP processor.
-
 ### For CDP SMM deployments (via Apache Knox)
 
 Your Knox gateway URL will typically be:
@@ -212,50 +91,9 @@ https://<your-knox-gateway>:8444/gateway/smm
 
 Get your Knox JWT token from the CDP UI and use it with the configurations below.
 
-## Setup
+#### Knox Configuration Examples
 
-### Option 1: Claude Desktop (Local)
-
-1. **Clone and install:**
-   ```bash
-   git clone https://github.com/your-org/ssm-mcp-server.git
-   cd ssm-mcp-server
-   
-   # Using uv (recommended)
-   make setup
-   
-   # Or using pip
-   python3 -m venv .venv
-   source .venv/bin/activate
-   pip install -e .
-   ```
-
-2. **Configure Claude Desktop** - Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
-   ```json
-   {
-     "mcpServers": {
-       "ssm-mcp-server": {
-         "command": "/FULL/PATH/TO/SSM-MCP-Server/.venv/bin/python",
-         "args": [
-           "-m",
-           "ssm_mcp_server.server"
-         ],
-         "env": {
-           "MCP_TRANSPORT": "stdio",
-           "KNOX_GATEWAY_URL": "https://knox-gateway.yourshere.cloudera.site/gateway/smm",
-           "KNOX_TOKEN": "<your_knox_jwt_token>",
-           "SMM_READONLY": "true"
-         }
-       }
-     }
-   }
-   ```
-
-3. **Restart Claude Desktop** and start asking questions about your SMM cluster!
-
-### Knox Configuration Examples
-
-#### Option A: JWT Token Authentication
+**Option A: JWT Token Authentication**
 ```json
 {
   "mcpServers": {
@@ -274,7 +112,7 @@ Get your Knox JWT token from the CDP UI and use it with the configurations below
 }
 ```
 
-#### Option B: Username/Password Authentication
+**Option B: Username/Password Authentication**
 ```json
 {
   "mcpServers": {
@@ -290,31 +128,6 @@ Get your Knox JWT token from the CDP UI and use it with the configurations below
         "KNOX_TOKEN_ENDPOINT": "https://your-knox-gateway:8444/gateway/knoxsso/api/v1/websso",
         "SMM_READONLY": "true"
       }
-    }
-  }
-}
-```
-
-### Option 2: Direct Installation (Cloudera Agent Studio)
-
-For use with Cloudera Agent Studio, use the `uvx` command:
-
-```json
-{
-  "mcpServers": {
-    "ssm-mcp-server": {
-      "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/your-org/ssm-mcp-server@main",
-        "run-server"
-      ],
-       "env": {
-         "MCP_TRANSPORT": "stdio",
-         "KNOX_GATEWAY_URL": "https://knox-gateway.yourshere.cloudera.site/gateway/smm",
-         "KNOX_TOKEN": "<your_knox_jwt_token>",
-         "SMM_READONLY": "true"
-       }
     }
   }
 }
@@ -431,62 +244,42 @@ Once configured, you can ask Claude questions like:
 - `kafka-topics.sh --create --topic user-events --partitions 3 --bootstrap-server localhost:9092`
 - `kafka-topics.sh --delete --topic test-topic --bootstrap-server localhost:9092`
 
-### Consumer Group Management
-- "List all consumer groups"
-- "Show me details for consumer group 'my-app'"
-- "Reset the offset for consumer group 'my-app' on topic 'user-events' partition 0 to offset 100"
-- "What consumers are currently active?"
+### Broker Management
+- "Show me all brokers in the cluster"
+- "What are the details for broker 1?"
+- "Show me broker metrics for the last hour"
+- "What are the broker configurations?"
 
 ![Broker Information](images/ListBrokerInfo.png)
 *Example: Detailed broker information and monitoring*
 
-### Metrics and Monitoring
-- "Show me cluster metrics for the last hour"
-- "What are the metrics for topic 'user-events'?"
-- "Show me consumer group metrics for 'my-app'"
-- "What are the broker metrics for broker 1?"
-
-### Alert Management
-- "Show me all alert policies"
-- "Create an alert policy for topic lag"
-- "What alerts are currently active?"
-- "Mark these notifications as read"
-
-### Schema Registry
-- "Show me schema information for topic 'user-events'"
-- "What are the key and value schemas for topic 'sales-data'?"
-- "Register a new schema for topic 'events'"
-
-### Kafka Connect
-- "List all Kafka Connect connectors"
-- "Show me details for connector 'file-source'"
-- "Create a new connector for database sync"
-- "What are the Connect worker metrics?"
-
-### Lineage and Data Flow
-- "Show me the lineage for topic 'user-events'"
-- "What's the data flow for consumer group 'analytics'?"
-- "Show me producer lineage for 'data-ingestion'"
+### Configuration Management
+- "Show me broker configurations"
+- "What are the topic configurations for 'heartbeats'?"
+- "Show me default topic configurations"
+- "What are the cluster configuration details?"
 
 ## Available Tools
 
-**Current Status**: 25.6% success rate (22 out of 86 MCP tools working)
+**Current Status**: 34.4% success rate (22 out of 64 MCP tools working)
 
 The following tools are currently **working and functional**:
 
-### 🔧 Core Information (100% working)
+### 🔧 Core SMM Management (100% working)
 - `get_smm_info()` - Get SMM version and system information
 - `get_smm_version()` - Get SMM version details
 
-### 🏢 Cluster and Broker Management (100% working)
+### 🏢 Cluster Management (100% working)
 - `get_cluster_details()` - Get cluster details and information
+
+### 🖥️ Broker Management (100% working)
 - `get_brokers()` - Get all brokers in the cluster
 - `get_broker(broker_id)` - Get details of a specific broker
 - `get_broker_metrics(broker_id, duration?, from_time?, to_time?)` - Get metrics for a specific broker
 - `get_all_broker_details()` - Get all broker details with configurations
 - `get_broker_details(broker_id)` - Get detailed broker information including configuration
 
-### 📊 Topic Management - Read Operations (62.5% working)
+### 📊 Topic Management (100% working)
 - `get_all_topic_infos()` - Get all topic information
 - `get_topic_description(topic_name)` - Get detailed description of a specific topic
 - `get_topic_info(topic_name)` - Get basic information about a specific topic
@@ -496,19 +289,15 @@ The following tools are currently **working and functional**:
 - `get_all_topic_configs()` - Get configurations for all topics
 - `get_default_topic_configs()` - Get default topic configurations
 
-### 📢 Notifiers Management (66.7% working)
-- `get_notifiers()` - Get all notifiers
-- `get_notifier_provider_configs()` - Get notifier provider configurations
+### ⚙️ Configuration Management (100% working)
+- `get_broker_configs()` - Get broker configurations
 
-### 🔄 Replication Statistics (20% working)
-- `is_replication_configured()` - Check if replication is configured
-
-### 🔌 Kafka Connect Enhanced (62.5% working)
-- `get_connector_templates()` - Get available connector templates
-- `get_connector_config_definitions(connector_plugin_class)` - Get connector configuration definitions
-- `get_connector_config_sample(name, connector_plugin_class, version)` - Get sample connector configuration
-- `is_connect_configured()` - Check if Kafka Connect is configured
-- `get_connect_worker_metrics(duration?, from_time?, to_time?)` - Get Kafka Connect worker metrics
+### 🔧 Admin Endpoints (100% working) - **NEW!**
+- `get_admin_cluster()` - Get admin cluster information with detailed broker and controller data
+- `get_admin_brokers()` - Get admin brokers information with detailed broker data
+- `get_admin_topics()` - Get admin topics information with detailed topic and partition data
+- `get_admin_topic_details(topic_name)` - Get admin topic details for a specific topic
+- `get_admin_topic_partitions(topic_name)` - Get admin topic partitions for a specific topic
 
 ---
 
@@ -543,12 +332,12 @@ For detailed information about current limitations, non-working features, and kn
 
 📋 **[LimitationsREADME.md](LimitationsREADME.md)** - Comprehensive documentation of:
 - SMM topic creation limitations
-- Non-working MCP tools (75% currently not working)
-- Working MCP tools (25% success rate)
-- API endpoint issues and resolution status
+- Non-working MCP tools (65.6% currently not working)
+- Working MCP tools (34.4% success rate)
+- API endpoint limitations and resolution status
 - Contributing guidelines for fixes
 
-**Quick Summary**: The server currently has a 25.6% success rate (22/86 tools working) due to API endpoint issues. Core functionality like cluster management, topic listing, and broker monitoring is operational.
+**Quick Summary**: The server currently has a 34.4% success rate (22/64 tools working) due to SMM API limitations. Core functionality like cluster management, topic listing, broker monitoring, and admin operations is operational. Many advanced features are not available through the SMM API.
 
 ## Security
 
@@ -586,30 +375,30 @@ export MCP_LOG_LEVEL=DEBUG
 
 ## Summary
 
-The SSM MCP Server is a **comprehensive management platform** for Cloudera Streams Messaging Manager, providing Claude Desktop with access to virtually all SMM functionality through **60+ MCP tools**.
+The SSM MCP Server is a **focused management platform** for Cloudera Streams Messaging Manager, providing Claude Desktop with access to core SMM functionality through **22 verified MCP tools**.
 
 ### 🎯 **What You Get:**
-- **Complete SMM Control**: Manage clusters, topics, consumers, and alerts
-- **Advanced Monitoring**: Real-time metrics and comprehensive alerting
-- **Data Management**: Schema registry, Kafka Connect, and lineage tracking
+- **Core SMM Control**: Manage clusters, brokers, and topics
+- **Comprehensive Monitoring**: Detailed cluster and broker information
+- **Configuration Management**: Broker and topic configuration access
+- **Admin Operations**: Advanced cluster, broker, and topic data access
 - **Enterprise Features**: Multi-environment support and secure authentication
-- **Developer Tools**: Topic consumption, offset management, and data exploration
 
 ### 🚀 **Key Benefits:**
-- **95%+ API Coverage**: Access to virtually all SMM functionality
-- **90+ MCP Tools**: Comprehensive toolset for every use case
-- **12 Functional Categories**: Organized, discoverable capabilities
-- **Enterprise Ready**: Security, monitoring, and scalability features
+- **34.4% API Coverage**: Access to core SMM functionality that's actually available
+- **22 Working Tools**: Reliable toolset for essential SMM operations
+- **6 Functional Categories**: Organized, discoverable capabilities
+- **Production Ready**: Stable, tested functionality for real-world use
 - **User Friendly**: Natural language interaction through Claude Desktop
 - **Flexible**: Supports both standalone and CDP deployments
 
 ### 📈 **Perfect For:**
-- **Data Engineers**: Topic management, consumer monitoring, real-time analysis
-- **DevOps Teams**: Cluster management, monitoring, alerting
-- **Data Scientists**: Data exploration, lineage tracking, schema management
-- **Platform Admins**: System monitoring, configuration management, security
+- **Data Engineers**: Topic management, cluster monitoring, configuration analysis
+- **DevOps Teams**: Cluster management, broker monitoring, system health
+- **Platform Admins**: System monitoring, configuration management, cluster oversight
+- **Kafka Users**: Topic exploration, broker details, cluster information
 
-The SSM MCP Server transforms Claude Desktop into a powerful SMM management interface, enabling natural language interaction with your entire Streams Messaging Manager environment! 🎉
+The SSM MCP Server transforms Claude Desktop into a reliable SMM management interface, enabling natural language interaction with your Streams Messaging Manager environment! 🎉
 
 ## License
 

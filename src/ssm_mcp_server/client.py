@@ -1014,3 +1014,24 @@ class SMMClient:
     def get_access(self) -> Dict[str, Any]:
         """Get access information."""
         return self._get("authentication/access")
+    
+    # Additional working endpoints discovered through API exploration
+    def get_admin_cluster(self) -> Dict[str, Any]:
+        """Get admin cluster information."""
+        return self._get("api/v1/admin/cluster")
+    
+    def get_admin_brokers(self) -> Dict[str, Any]:
+        """Get admin brokers information."""
+        return self._get("api/v1/admin/brokers")
+    
+    def get_admin_topics(self) -> Dict[str, Any]:
+        """Get admin topics information."""
+        return self._get("api/v1/admin/topics")
+    
+    def get_admin_topic_details(self, topic_name: str) -> Dict[str, Any]:
+        """Get admin topic details."""
+        return self._get(f"api/v1/admin/topics/{topic_name}")
+    
+    def get_admin_topic_partitions(self, topic_name: str) -> Dict[str, Any]:
+        """Get admin topic partitions."""
+        return self._get(f"api/v1/admin/topics/{topic_name}/partitions")
