@@ -26,9 +26,9 @@ def get_broker_info():
         
         # Create configuration for cloud environment
         config = ServerConfig()
-        config.knox_gateway_url = "https://irb-kakfa-only-master0.cgsi-dem.prep-j1tk.a3.cloudera.site:443/irb-kakfa-only/cdp-proxy-api/smm-api"
-        config.knox_user = "ibrooks"
-        config.knox_password = "Admin12345#"
+        config.knox_gateway_url = os.getenv("KNOX_GATEWAY_URL", "https://irb-kakfa-only-master0.cgsi-dem.prep-j1tk.a3.cloudera.site:443/irb-kakfa-only/cdp-proxy-api/smm-api")
+        config.knox_user = os.getenv("KNOX_USER", "admin")
+        config.knox_password = os.getenv("KNOX_PASSWORD", "admin")
         config.smm_readonly = True
         config.knox_verify_ssl = True
         

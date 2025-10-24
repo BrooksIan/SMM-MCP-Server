@@ -80,7 +80,17 @@ Model Context Protocol server providing access to Cloudera Streams Messaging Man
    }
    ```
 
-3. **Restart Claude Desktop** and start interacting with your SMM cluster!
+3. **Set your credentials**:
+   ```bash
+   # Option A: Interactive setup (recommended)
+   python setup_config.py
+   
+   # Option B: Manual setup
+   cp config.template .env
+   nano .env  # Edit with your actual credentials
+   ```
+
+4. **Restart Claude Desktop** and start interacting with your SMM cluster!
 
 ### For CDP SMM deployments (via Apache Knox)
 

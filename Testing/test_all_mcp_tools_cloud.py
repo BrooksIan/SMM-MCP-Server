@@ -11,6 +11,14 @@ import subprocess
 import time
 from pathlib import Path
 
+# Load environment variables from .env file if it exists
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    # dotenv not available, continue without it
+    pass
+
 # Add the project root to the Python path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root / "src"))
@@ -30,9 +38,9 @@ def test_all_mcp_tools_cloud():
         
         # Create configuration for cloud environment
         config = ServerConfig()
-        config.knox_gateway_url = "https://irb-kakfa-only-master0.cgsi-dem.prep-j1tk.a3.cloudera.site:443/irb-kakfa-only/cdp-proxy-api/smm-api"
-        config.knox_user = "ibrooks"
-        config.knox_password = "Admin12345#"
+        config.knox_gateway_url = os.getenv("KNOX_GATEWAY_URL", "https://your-knox-gateway:8444/gateway/smm")
+        config.knox_user = os.getenv("KNOX_USER", "admin")
+        config.knox_password = os.getenv("KNOX_PASSWORD", "admin")
         config.smm_readonly = True
         config.knox_verify_ssl = True
         
@@ -228,9 +236,9 @@ def test_mcp_server_process_cloud():
     # Set environment variables for cloud
     env = os.environ.copy()
     env.update({
-        "KNOX_GATEWAY_URL": "https://irb-kakfa-only-master0.cgsi-dem.prep-j1tk.a3.cloudera.site:443/irb-kakfa-only/cdp-proxy-api/smm-api",
-        "KNOX_USER": "ibrooks",
-        "KNOX_PASSWORD": "Admin12345#",
+        "KNOX_GATEWAY_URL": os.getenv("KNOX_GATEWAY_URL", "https://your-knox-gateway:8444/gateway/smm"),
+        "KNOX_USER": os.getenv("KNOX_USER", "admin"),
+        "KNOX_PASSWORD": os.getenv("KNOX_PASSWORD", "admin"),
         "SMM_READONLY": "true",
         "KNOX_VERIFY_SSL": "true",
         "HTTP_TIMEOUT_SECONDS": "30",

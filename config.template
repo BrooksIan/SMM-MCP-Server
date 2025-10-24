@@ -1,0 +1,21 @@
+# SMM MCP Server Configuration Template
+# Copy this file to .env and update with your actual values
+
+# Knox Gateway Configuration (for CDP deployments)
+KNOX_GATEWAY_URL=https://your-knox-gateway:8444/gateway/smm
+KNOX_USER=your-username
+KNOX_PASSWORD=your-password
+
+# Alternative: Use JWT token instead of username/password
+# KNOX_TOKEN=your-jwt-token
+
+# Direct SMM Configuration (for standalone deployments)
+# SMM_API_BASE=http://localhost:8080/api/v2
+# SMM_USER=admin
+# SMM_PASSWORD=admin
+
+# General Configuration
+SMM_READONLY=true
+KNOX_VERIFY_SSL=true
+HTTP_TIMEOUT_SECONDS=30
+MCP_TRANSPORT=stdio
