@@ -34,11 +34,9 @@ def main():
     
     tests = [
         "test_smm_connection.py",
-        "test_mcp_server.py",
-        "test_knox_connection.py",
-        "test_knox_mcp_server.py",
-        "test_phase1_methods.py",
-        "test_fixed_endpoints.py"
+        "test_connection.py",
+        "test_connection_uv.py",
+        "test_all_mcp_tools_cloud.py"
     ]
     
     passed = 0

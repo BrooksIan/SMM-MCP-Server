@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "ssm-mcp-server": {
+      "command": "/Users/ibrooks/Documents/GitHub/SSM-MCP-Server/run_mcp_server.sh",
+      "args": [],
+      "cwd": "/Users/ibrooks/Documents/GitHub/SSM-MCP-Server",
+      "env": {
+        "MCP_TRANSPORT": "stdio",
+        "KNOX_GATEWAY_URL": "https://irb-kakfa-only-master0.cgsi-dem.prep-j1tk.a3.cloudera.site:443/irb-kakfa-only/cdp-proxy-api/smm-api",
+        "KNOX_USER": "ibrooks",
+        "KNOX_PASSWORD": "Admin12345#",
+        "SMM_READONLY": "true",
+        "KNOX_VERIFY_SSL": "true",
+        "HTTP_TIMEOUT_SECONDS": "30"
+      }
+    }
+  }
+}

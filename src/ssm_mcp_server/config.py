@@ -70,4 +70,4 @@ class ServerConfig:
                 raise ValueError(
                     "KNOX_GATEWAY_URL or SMM_API_BASE must be set. Please configure your MCP server with the appropriate environment variables."
                 )
-        return f"{self.knox_gateway_url.rstrip('/')}/smm/api/v2"
+        return self.knox_gateway_url.rstrip('/')

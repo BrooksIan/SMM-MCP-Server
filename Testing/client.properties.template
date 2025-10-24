@@ -1,0 +1,25 @@
+# Kafka Client Properties Template
+# Copy this file and update with your actual values
+
+# Security Protocol
+security.protocol=SSL
+
+# SSL Configuration
+ssl.truststore.location=<path-to-truststore>
+ssl.truststore.password=<truststore-password>
+ssl.keystore.location=<path-to-keystore>
+ssl.keystore.password=<keystore-password>
+ssl.key.password=<key-password>
+
+# Alternative SSL Configuration (if using certificates)
+# ssl.ca.location=<path-to-ca-cert>
+# ssl.certificate.location=<path-to-client-cert>
+# ssl.key.location=<path-to-client-key>
+
+# SASL Configuration (if using SASL)
+# sasl.mechanism=PLAIN
+# sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username="<username>" password="<password>";
+
+# Additional Configuration
+request.timeout.ms=30000
+retries=3

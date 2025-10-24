@@ -42,20 +42,20 @@ make test-smm
 - `test_smm_connection.py` - Tests basic SMM connectivity and endpoints
 - `test_connection.py` - Direct SMM connection testing script
 - `test_connection_uv.py` - UV-based connection testing script
-- `test_mcp_server.py` - Tests MCP server components and structure
 - `run_tests.py` - Test runner that executes all tests
 
-### Comprehensive Testing
-- `test_all_mcp_tools_comprehensive.py` - Tests all 86 MCP tools comprehensively
-- `test_all_mcp_tools_fixed.py` - Tests MCP tools with fixed API endpoints
-- `test_fixed_endpoints.py` - Tests specific API endpoint fixes
+### Cloud Environment Testing
+- `test_all_mcp_tools_cloud.py` - Tests all MCP tools against cloud environment with Knox authentication
 
-### Phase 1 Testing
-- `test_phase1_methods.py` - Tests newly implemented Phase 1 methods
+### Utility Scripts
+- `list_topics_cloud.py` - List topics from cloud SMM environment
+- `add_data_to_mcptesttopic.py` - Guide for adding data to topics
+- `simple_topic_creation_guide.py` - Guide for creating new Kafka topics
+- `kafka_producer_mcptesttopic.py` - Python producer script for mcptesttopic
+- `client.properties.template` - Kafka client configuration template
 
-### Knox Integration Testing
-- `test_knox_connection.py` - Tests Knox gateway connectivity and authentication
-- `test_knox_mcp_server.py` - Tests MCP server with Knox configuration
+### Documentation
+- `KNOX_TEST_RESULTS.md` - Results from Knox integration tests
 
 ## What the Tests Check
 

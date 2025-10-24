@@ -145,7 +145,7 @@ class SMMClient:
         """Get SMM version and system information."""
         try:
             # Try to get basic cluster info using working endpoints
-            brokers = self._get("brokers")
+            brokers = self._get("api/v1/admin/brokers")
             topics = self._get("configs/topics")
             return {
                 "status": "connected",
@@ -175,7 +175,7 @@ class SMMClient:
     def get_cluster_details(self) -> Dict[str, Any]:
         """Get cluster details and information."""
         # Use brokers endpoint to get cluster info
-        brokers = self._get("brokers")
+        brokers = self._get("api/v1/admin/brokers")
         return {
             "brokers": brokers,
             "broker_count": len(brokers),
@@ -184,12 +184,12 @@ class SMMClient:
 
     def get_brokers(self) -> Dict[str, Any]:
         """Get all brokers in the cluster."""
-        return self._get("brokers")
+        return self._get("api/v1/admin/brokers")
 
     def get_broker(self, broker_id: int) -> Dict[str, Any]:
         """Get details of a specific broker."""
         # Get all brokers and find the specific one
-        brokers = self._get("brokers")
+        brokers = self._get("api/v1/admin/brokers")
         for broker in brokers:
             if broker.get("id") == broker_id:
                 return broker
@@ -218,7 +218,7 @@ class SMMClient:
     def get_all_broker_details(self) -> Dict[str, Any]:
         """Get all broker details with configurations."""
         # Use brokers endpoint as fallback
-        brokers = self._get("brokers")
+        brokers = self._get("api/v1/admin/brokers")
         return {
             "brokers": brokers,
             "broker_count": len(brokers),
@@ -241,12 +241,12 @@ class SMMClient:
 
     def get_all_topic_infos(self) -> Dict[str, Any]:
         """Get all topic information."""
-        return self._get("configs/topics")
+        return self._get("api/v1/admin/configs/topics")
 
     def get_topic_description(self, topic_name: str) -> Dict[str, Any]:
         """Get detailed description of a specific topic."""
         # Find topic in the topics list
-        topics = self._get("configs/topics")
+        topics = self._get("api/v1/admin/configs/topics")
         for topic in topics:
             if topic.get("resourceName") == topic_name:
                 return {
@@ -311,7 +311,7 @@ class SMMClient:
     def get_all_topic_configs(self) -> Dict[str, Any]:
         """Get configurations for all topics."""
         # Get all topics which include their configurations
-        topics = self._get("configs/topics")
+        topics = self._get("api/v1/admin/configs/topics")
         return {
             "topics": topics,
             "topic_count": len(topics),
@@ -320,7 +320,7 @@ class SMMClient:
 
     def get_default_topic_configs(self) -> Dict[str, Any]:
         """Get default topic configurations."""
-        return self._get("configs/default/topics")
+        return self._get("api/v1/admin/configs/default/topics")
 
     def alter_topic_configs(
         self, topic_name: str, configs: Dict[str, str]
@@ -336,7 +336,27 @@ class SMMClient:
 
     def get_consumer_groups(self) -> Dict[str, Any]:
         """Get all consumer groups."""
-        return self._get("consumerGroupRelatedDetails/consumerGroups")
+        return self._get("api/v1/admin/consumers")
+    
+    def get_consumer_group(self, group_id: str) -> Dict[str, Any]:
+        """Get specific consumer group details."""
+        return self._get(f"api/v1/admin/consumers/{group_id}")
+    
+    def get_consumer_group_offsets(self, group_id: str) -> Dict[str, Any]:
+        """Get consumer group offsets."""
+        return self._get(f"api/v1/admin/consumers/{group_id}/offsets")
+    
+    def get_consumer_group_details(self, group_id: str) -> Dict[str, Any]:
+        """Get detailed consumer group information."""
+        return self._get(f"api/v1/admin/consumers/{group_id}")
+    
+    def get_consumer_group_members(self, group_id: str) -> Dict[str, Any]:
+        """Get consumer group members."""
+        return self._get(f"api/v1/admin/consumers/{group_id}/members")
+    
+    def get_consumer_group_summary(self, group_id: str) -> Dict[str, Any]:
+        """Get consumer group summary."""
+        return self._get(f"api/v1/admin/consumers/{group_id}/summary")
 
     def get_consumer_group_names(self) -> Dict[str, Any]:
         """Get all consumer group names."""
@@ -460,6 +480,30 @@ class SMMClient:
         if to_time is not None:
             params["to"] = to_time
         return self._get("admin/metrics/aggregated/producers", params=params)
+    
+    def get_cluster_metrics(self) -> Dict[str, Any]:
+        """Get cluster metrics."""
+        return self._get("api/v1/admin/metrics/cluster")
+    
+    def get_broker_metrics_summary(self) -> Dict[str, Any]:
+        """Get broker metrics summary."""
+        return self._get("api/v1/admin/metrics/brokers/summary")
+    
+    def get_topic_metrics(self, topic_name: str) -> Dict[str, Any]:
+        """Get topic metrics."""
+        return self._get(f"api/v1/admin/metrics/topics/{topic_name}")
+    
+    def get_consumer_group_metrics(self, group_id: str) -> Dict[str, Any]:
+        """Get consumer group metrics."""
+        return self._get(f"api/v1/admin/metrics/consumers/{group_id}")
+    
+    def get_producer_metrics(self, producer_id: str = "all") -> Dict[str, Any]:
+        """Get producer metrics."""
+        return self._get(f"api/v1/admin/metrics/producers/{producer_id}")
+    
+    def get_consumer_metrics(self) -> Dict[str, Any]:
+        """Get consumer metrics."""
+        return self._get("api/v1/admin/metrics/consumers")
 
     def get_producer_metrics(
         self,
@@ -559,7 +603,15 @@ class SMMClient:
 
     def get_alert_notifications(self) -> Dict[str, Any]:
         """Get all alert notifications."""
-        return self._get("alertNotifications/alertNotifications")
+        return self._get("api/v1/admin/alerts/notifications")
+    
+    def get_alert_history(self) -> Dict[str, Any]:
+        """Get alert history."""
+        return self._get("api/v1/admin/alerts/history")
+    
+    def get_alert_summary(self) -> Dict[str, Any]:
+        """Get alert summary."""
+        return self._get("api/v1/admin/alerts/summary")
 
     def get_alert_notifications_by_entity_type(
         self, entity_type: str
@@ -621,16 +673,129 @@ class SMMClient:
         )
 
     # ============================================================================
+    # SMM API Methods - Topic Data Sampling
+    # ============================================================================
+    
+    def get_topic_offsets(self, topic_name: str) -> Dict[str, Any]:
+        """Get topic offsets."""
+        return self._get(f"api/v1/admin/topics/{topic_name}/offsets")
+    
+    def get_topic_content(self, topic_name: str, partition: int = 0, offset: int = 0, limit: int = 10) -> Dict[str, Any]:
+        """Get topic content/messages."""
+        params = {"partition": partition, "offset": offset, "limit": limit}
+        return self._get(f"api/v1/admin/topics/{topic_name}/messages", params=params)
+    
+    def get_topic_messages(self, topic_name: str) -> Dict[str, Any]:
+        """Get topic messages."""
+        return self._get(f"api/v1/admin/topics/{topic_name}/messages")
+    
+    def get_topic_sample(self, topic_name: str) -> Dict[str, Any]:
+        """Get topic sample data."""
+        return self._get(f"api/v1/admin/topics/{topic_name}/sample")
+    
+    def get_topic_latest_messages(self, topic_name: str) -> Dict[str, Any]:
+        """Get latest messages from topic."""
+        return self._get(f"api/v1/admin/topics/{topic_name}/messages/latest")
+
+    # ============================================================================
     # SMM API Methods - Kafka Connect
     # ============================================================================
 
     def get_connectors(self) -> Dict[str, Any]:
         """Get all Kafka Connect connectors."""
-        return self._get("kafkaConnect/connectors")
+        return self._get("api/v1/admin/connectors")
+    
+    def get_connector(self, connector_id: str) -> Dict[str, Any]:
+        """Get specific connector details."""
+        return self._get(f"api/v1/admin/connectors/{connector_id}")
+    
+    def get_connector_status(self, connector_id: str) -> Dict[str, Any]:
+        """Get connector status."""
+        return self._get(f"api/v1/admin/connectors/{connector_id}/status")
+    
+    def get_connector_tasks(self, connector_id: str) -> Dict[str, Any]:
+        """Get connector tasks."""
+        return self._get(f"api/v1/admin/connectors/{connector_id}/tasks")
+    
+    def get_connector_plugins(self) -> Dict[str, Any]:
+        """Get connector plugins."""
+        return self._get("api/v1/admin/connectors/plugins")
+    
+    def get_connector_configs(self, connector_id: str) -> Dict[str, Any]:
+        """Get connector configurations."""
+        return self._get(f"api/v1/admin/connectors/{connector_id}/configs")
 
-    def get_connector(self, connector_name: str) -> Dict[str, Any]:
-        """Get details of a specific connector."""
-        return self._get(f"kafkaConnect/connector/{connector_name}")
+    # ============================================================================
+    # SMM API Methods - Health Monitoring
+    # ============================================================================
+    
+    def get_cluster_health(self) -> Dict[str, Any]:
+        """Get cluster health status."""
+        return self._get("api/v1/admin/health/cluster")
+    
+    def get_broker_health(self, broker_id: int) -> Dict[str, Any]:
+        """Get broker health status."""
+        return self._get(f"api/v1/admin/health/brokers/{broker_id}")
+    
+    def get_topic_health(self, topic_name: str) -> Dict[str, Any]:
+        """Get topic health status."""
+        return self._get(f"api/v1/admin/health/topics/{topic_name}")
+    
+    def get_consumer_group_health(self, group_id: str) -> Dict[str, Any]:
+        """Get consumer group health status."""
+        return self._get(f"api/v1/admin/health/consumers/{group_id}")
+    
+    def get_system_health(self) -> Dict[str, Any]:
+        """Get system health status."""
+        return self._get("api/v1/admin/health/system")
+
+    # ============================================================================
+    # SMM API Methods - Advanced Features
+    # ============================================================================
+    
+    def get_topic_schema(self, topic_name: str) -> Dict[str, Any]:
+        """Get topic schema information."""
+        return self._get(f"api/v1/admin/topics/{topic_name}/schema")
+    
+    def get_topic_metadata(self, topic_name: str) -> Dict[str, Any]:
+        """Get topic metadata."""
+        return self._get(f"api/v1/admin/topics/{topic_name}/metadata")
+    
+    def get_topic_statistics(self, topic_name: str) -> Dict[str, Any]:
+        """Get topic statistics."""
+        return self._get(f"api/v1/admin/topics/{topic_name}/statistics")
+    
+    def get_broker_statistics(self, broker_id: int) -> Dict[str, Any]:
+        """Get broker statistics."""
+        return self._get(f"api/v1/admin/brokers/{broker_id}/statistics")
+    
+    def get_cluster_statistics(self) -> Dict[str, Any]:
+        """Get cluster statistics."""
+        return self._get("api/v1/admin/cluster/statistics")
+
+    # ============================================================================
+    # SMM API Methods - Configuration Management
+    # ============================================================================
+    
+    def get_cluster_configs(self) -> Dict[str, Any]:
+        """Get cluster configurations."""
+        return self._get("api/v1/admin/configs/cluster")
+    
+    def get_broker_configs(self, broker_id: int) -> Dict[str, Any]:
+        """Get broker configurations."""
+        return self._get(f"api/v1/admin/configs/brokers")
+    
+    def get_topic_config_details(self, topic_name: str) -> Dict[str, Any]:
+        """Get topic configuration details."""
+        return self._get(f"api/v1/admin/topics/{topic_name}/configs")
+    
+    def get_consumer_group_configs(self, group_id: str) -> Dict[str, Any]:
+        """Get consumer group configurations."""
+        return self._get(f"api/v1/admin/consumers/{group_id}/configs")
+    
+    def get_connector_configs(self, connector_id: str) -> Dict[str, Any]:
+        """Get connector configurations."""
+        return self._get(f"api/v1/admin/connectors/{connector_id}/configs")
 
     def create_connector(self, connector_config: Dict[str, Any]) -> Dict[str, Any]:
         """Create a new connector."""
